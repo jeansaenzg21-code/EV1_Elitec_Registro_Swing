@@ -2,6 +2,7 @@ package util;
 
 public class ValidateUtil {
 	public static final String NOMBRES = "[A-Za-záéíóúÁÉÍÓÚñÑüÜ ]{2,40}";
+	public static final String NOMBRE_MAYUSCULA = "[A-ZÁÉÍÓÚÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ ]*";
 	public static final String APELLIDOS = "[A-Za-záéíóúÁÉÍÓÚñÑüÜ ]{2,40}";
 	public static final String DNI = "\\d{8}";
 	public static final String DIRECCION = "[A-Za-z0-9áéíóúÁÉÍÓÚñÑ#.,\\- ]{5,100}";

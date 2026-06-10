@@ -1,6 +1,9 @@
 package model;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.PreparedStatement;
 
 import entidad.Docente;
@@ -8,6 +11,7 @@ import util.MySqlDBConexion;
 
 public class DocenteModel {
 	public int insertaDocente(Docente obj) {
+
 		int salida = -1;
 		
 		Connection conn = null;
@@ -45,5 +49,63 @@ public class DocenteModel {
 		}
 		return salida;
 	}
+	
+	public List<Docente> listaDocente(String nombre, String dni, String direccion) {
+
+	    List<Docente> lista = new ArrayList<Docente>();
+
+	    Connection conn = null;
+	    PreparedStatement pstm = null;
+	    ResultSet rs = null;
+
+	    try {
+
+	        conn = MySqlDBConexion.getConexion();
+
+	        String sql = "SELECT * FROM docente "
+	                + "WHERE nombres LIKE ? "
+	                + "AND dni LIKE ? "
+	                + "AND direccion LIKE ?";
+
+	        pstm = conn.prepareStatement(sql);
+
+	        pstm.setString(1, "%" + nombre + "%");
+	        pstm.setString(2, "%" + dni + "%");
+	        pstm.setString(3, "%" + direccion + "%");
+
+	        rs = pstm.executeQuery();
+
+	        while (rs.next()) {
+
+	            Docente obj = new Docente();
+
+	            obj.setIdDocente(rs.getInt("idDocente"));
+	            obj.setNombres(rs.getString("nombres"));
+	            obj.setApellidos(rs.getString("apellidos"));
+	            obj.setDni(rs.getString("dni"));
+	            obj.setDireccion(rs.getString("direccion"));
+	            obj.setEstado(rs.getString("estado"));
+
+	            lista.add(obj);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    
+	    finally {
+	        try {
+	            if(rs != null) rs.close();
+	            if(pstm != null) pstm.close();
+	            if(conn != null) conn.close();
+	        } catch (Exception e2) {
+	            e2.printStackTrace();
+	        }
+	    }
+
+
+	    return lista;
+	}
+	
 
 }
